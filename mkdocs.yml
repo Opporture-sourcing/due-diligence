@@ -1,0 +1,85 @@
+site_name: DD-Agents Documentation
+site_url: https://zoharbabin.com/due-diligence-agents/
+site_description: Legal flags a risk. Finance flags another. We connect and cite. Open-source forensic M&A due diligence — 13 AI agents read your entire data room across 9 domains, cross-reference findings no single reviewer connects, and trace every one to an exact quote.
+site_author: Zohar Babin
+repo_url: https://github.com/zoharbabin/due-diligence-agents
+repo_name: zoharbabin/due-diligence-agents
+
+# Internal, unpublished notes (one-off investigations, benchmarks) — not part
+# of the public site. Linked from GitHub issues/PRs via the repo blob URL.
+exclude_docs: |
+  research/
+
+theme:
+  name: material
+  custom_dir: docs/overrides
+  logo: marketing/assets/logo.svg
+  favicon: marketing/assets/logo-32.png
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - attr_list
+  - md_in_html
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation & First Run: user-guide/getting-started.md
+    - Deal Configuration: user-guide/deal-configuration.md
+    - Model Providers: user-guide/model-providers.md
+    - Provider Coverage: user-guide/provider-coverage.md
+    - Running the Pipeline: user-guide/running-pipeline.md
+    - Reading the Report: user-guide/reading-report.md
+    - CLI Reference: user-guide/cli-reference.md
+    - Troubleshooting: user-guide/troubleshooting.md
+  - Guides:
+    - How the Agents Work: agent-anatomy.md
+    - Agent Customization: agent-customization.md
+    - Contract Search: search-guide.md
+    - Knowledge Architecture: knowledge-architecture.md
+  - Trust & Safety:
+    - System Card: system-card.md
+    - Eval Datasheet: eval-datasheet.md
+  - Contributing: contributing.md
+  - Sample Report: https://zoharbabin.com/due-diligence-agents/sample-report/
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/zoharbabin/due-diligence-agents
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/dd-agents/

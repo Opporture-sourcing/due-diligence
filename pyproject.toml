@@ -1,0 +1,140 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dd-agents"
+version = "1.18.0"
+description = "Open-source forensic M&A due diligence — 13 AI agents read your data room across 9 domains, cross-reference findings no single reviewer connects, and cite every one to an exact quote"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.12"
+authors = [{name = "Zohar Babin"}]
+keywords = [
+    "due-diligence", "mergers-and-acquisitions", "contract-analysis",
+    "legal-tech", "ai-agents", "private-equity", "risk-analysis",
+    "cross-domain", "corporate-development", "data-room",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Office/Business",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Intended Audience :: Legal Industry",
+    "Typing :: Typed",
+]
+# All core dependencies are permissively licensed (Apache 2.0, MIT, BSD).
+# pymupdf (AGPL-3.0) is optional — see [project.optional-dependencies].
+dependencies = [
+    "claude-agent-sdk>=0.1.56",
+    "pydantic>=2.0",
+    "openpyxl>=3.1.3",
+    "networkx>=3.0",
+    "numpy>=1.24",
+    "rapidfuzz>=3.0",
+    "markitdown[docx,xlsx,pptx]>=0.1",
+    "xlrd>=2.0",
+    "scikit-learn>=1.3",
+    "click>=8.0",
+    "rich>=13.0",
+    "prompt-toolkit>=3.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+# pymupdf is AGPL-3.0 licensed (or Artifex commercial). Install separately.
+pdf = ["pymupdf>=1.23"]
+vector = ["chromadb>=0.4"]
+ocr = ["pytesseract>=0.3", "Pillow>=12.1", "pdf2image>=1.16"]
+glm-ocr = ["mlx-vlm>=0.1", "pypdfium2>=4.0", "Pillow>=12.1"]
+# Cross-platform GLM-OCR via Ollama (needs a running ollama daemon + a pulled
+# glm-ocr model). The mlx-vlm path above is Apple-Silicon only.
+glm-ocr-ollama = ["ollama>=0.3", "pypdfium2>=4.0", "Pillow>=12.1"]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "pytest-cov>=5.0",
+    "pytest-timeout>=2.3",
+    "ruff>=0.4",
+    "mypy>=1.10",
+    "pre-commit>=3.0",
+]
+docs = ["mkdocs-material>=9.5"]
+
+[project.urls]
+Homepage = "https://github.com/zoharbabin/due-diligence-agents"
+Repository = "https://github.com/zoharbabin/due-diligence-agents"
+Documentation = "https://zoharbabin.com/due-diligence-agents/"
+Issues = "https://github.com/zoharbabin/due-diligence-agents/issues"
+Changelog = "https://github.com/zoharbabin/due-diligence-agents/releases"
+
+[project.scripts]
+dd-agents = "dd_agents.cli:main"
+
+[project.entry-points."dd_agents.specialists"]
+# External agent packages register here. Each entry point must be a callable
+# that returns an AgentDescriptor instance. Example:
+#   my_agent = "my_package.agents:create_esg_descriptor"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "SIM", "TCH"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+# Per-test timeout (pytest-timeout). A unit test must never block on a real
+# network/SDK/subprocess call; the "thread" method interrupts even C-level
+# blocking I/O so a transient SDK-session stall can't wedge CI indefinitely.
+# e2e/eval tests legitimately run longer — override with @pytest.mark.timeout.
+timeout = 120
+timeout_method = "thread"
+markers = [
+    "e2e: end-to-end tests (require API key, slow)",
+    "eval: agent quality evaluation tests (require API key)",
+    "slow: tests that take more than 1 minute",
+    "local: deep validation tests, local-only (not for CI)",
+    "gateway: provider-agnostic live test through an Anthropic-compatible gateway (requires DD_TEST_GATEWAY_URL)",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+log_cli = false
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+log_cli_date_format = "%H:%M:%S"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+# Third-party packages without stubs (sklearn, pytesseract, etc.) trigger
+# import-untyped errors.  Per-module overrides handle missing packages, but
+# installed-without-stubs packages need this global disable.
+# unused-ignore: Pillow stubs vary across versions (load() typed in some,
+# untyped in others), so type: ignore comments may be needed locally but
+# unused in CI, or vice versa.
+disable_error_code = ["import-untyped", "unused-ignore"]
+
+[[tool.mypy.overrides]]
+module = [
+    "chromadb.*",
+    "fitz.*",
+    "markitdown.*",
+    "rapidfuzz.*",
+    "sklearn.*",
+    "pytesseract.*",
+    "pdf2image.*",
+    "PIL.*",
+    "mlx_vlm.*",
+    "pypdfium2.*",
+    "ollama.*",
+]
+ignore_missing_imports = true
