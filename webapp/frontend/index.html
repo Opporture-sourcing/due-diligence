@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Company Due Diligence — Reverse Search from a Website</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="logo">DD</span> Company Due Diligence</div>
+  <div class="tag">Open-source intelligence report</div>
+</header>
+
+<main id="app">
+  <!-- Step 1: input -->
+  <section id="view-input" class="view">
+    <div class="hero">
+      <h1>Reverse-search any company from its website</h1>
+      <p>Paste a company URL. We scrape the site, follow its social links, verify the address, check corporate
+        databases, review platforms, negative news and the people behind it — then score our confidence.</p>
+      <form id="analyze-form" class="url-form">
+        <input id="url-input" type="text" placeholder="https://example-company.com" autocomplete="off" required>
+        <button type="submit">Investigate</button>
+      </form>
+      <p id="input-error" class="error" hidden></p>
+    </div>
+    <div class="signal-grid">
+      <div class="signal"><b>Website</b>content, contact data, quality</div>
+      <div class="signal"><b>Domain</b>age, SSL, mail records</div>
+      <div class="signal"><b>Address</b>residential vs commercial</div>
+      <div class="signal"><b>Corporate DBs</b>D&amp;B, Crunchbase, OpenCorporates</div>
+      <div class="signal"><b>Social</b>profile existence &amp; activity</div>
+      <div class="signal"><b>Reviews</b>Trustpilot, BBB, review sites</div>
+      <div class="signal"><b>Negative news</b>scam, fraud, lawsuits</div>
+      <div class="signal"><b>People</b>leadership verification</div>
+    </div>
+  </section>
+
+  <!-- Step 2: progress -->
+  <section id="view-progress" class="view" hidden>
+    <div class="card progress-card">
+      <h2>Investigating <span id="progress-url"></span></h2>
+      <ol id="steps" class="steps"></ol>
+      <p id="progress-error" class="error" hidden></p>
+      <button id="cancel-btn" class="ghost">Start over</button>
+    </div>
+  </section>
+
+  <!-- Step 3: report -->
+  <section id="view-report" class="view" hidden></section>
+</main>
+
+<footer class="foot">Automated open-source intelligence. Signals are heuristic and can be incomplete — verify critical facts with primary documents and qualified advisors.</footer>
+<script src="app.js"></script>
+</body>
+</html>

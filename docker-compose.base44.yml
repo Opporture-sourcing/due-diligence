@@ -1,15 +1,24 @@
 services:
   web:
-    image: nginx:alpine
-    ports:
-      - "3000:80"
+    image: python:3.12-slim
+    working_dir: /app/webapp
     volumes:
-      - ./docs/marketing/sample-report-atlas/index.html:/usr/share/nginx/html/index.html:ro
-      - ./docs/marketing/sample-report-atlas/findings_merged.json:/usr/share/nginx/html/findings_merged.json:ro
-      - ./docs/marketing/sample-report-atlas/dd_report.xlsx:/usr/share/nginx/html/dd_report.xlsx:ro
-      - ./docs/marketing/screenshots:/usr/share/nginx/html/screenshots:ro
+      - ./:/app
+      - pipcache:/root/.cache/pip
+    ports:
+      - "3000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - WATCHFILES_FORCE_POLLING=true
+    command: >
+      sh -c "pip install -q -r requirements.txt &&
+             uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload --reload-dir backend"
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:80/"]
-      interval: 5s
-      timeout: 3s
-      retries: 10
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
+
+volumes:
+  pipcache:
