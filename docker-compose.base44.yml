@@ -1,0 +1,27 @@
+# Base44 dev environment — serves the Due Diligence Agents sample report.
+#
+# NOTE: This repository is a CLI tool (the `dd-agents` Python package, published
+# separately to PyPI). The actual `src/` package source is NOT in this repo, so
+# there is no live dev server to run. The richest thing to preview is the tool's
+# generated interactive HTML report, served statically here on port 3000.
+#
+# Running a real analysis (`dd-agents run ...`) requires an Anthropic API key
+# (or an Anthropic-compatible gateway) and is a long-running CLI job — see
+# AGENTS.md for how to run it.
+
+services:
+  preview:
+    image: nginx:alpine
+    container_name: dd_agents_preview
+    ports:
+      - "3000:80"
+    volumes:
+      # Serve the self-contained sample report at the site root.
+      - ./docs/sample-report:/usr/share/nginx/html:ro
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+    restart: unless-stopped

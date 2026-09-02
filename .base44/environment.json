@@ -1,0 +1,12 @@
+{
+  "previewPort": 3000,
+  "healthPath": "/",
+  "startCommand": "docker compose -f docker-compose.base44.yml up -d",
+  "secrets": [
+    {
+      "name": "ANTHROPIC_API_KEY",
+      "description": "Anthropic API key (or set ANTHROPIC_BASE_URL for a gateway). Required only to run live `dd-agents` analyses — NOT needed to view the sample report preview.",
+      "requiredAtBoot": false
+    }
+  ]
+}
