@@ -1,0 +1,15 @@
+services:
+  web:
+    image: nginx:alpine
+    ports:
+      - "3000:80"
+    volumes:
+      - ./docs/marketing/sample-report-atlas/index.html:/usr/share/nginx/html/index.html:ro
+      - ./docs/marketing/sample-report-atlas/findings_merged.json:/usr/share/nginx/html/findings_merged.json:ro
+      - ./docs/marketing/sample-report-atlas/dd_report.xlsx:/usr/share/nginx/html/dd_report.xlsx:ro
+      - ./docs/marketing/screenshots:/usr/share/nginx/html/screenshots:ro
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:80/"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
