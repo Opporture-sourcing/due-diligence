@@ -19,35 +19,14 @@
     <a href="https://github.com/zoharbabin/due-diligence-agents/stargazers"><img src="https://img.shields.io/github/stars/zoharbabin/due-diligence-agents?style=social" alt="GitHub Stars"></a>
   </p>
   <p align="center">
-    Built by <a href="https://zoharbabin.com">Zohar Babin</a>
+    Built by Pratap Chowdary
   </p>
 </p>
 
 ---
 
-**[See a sample report](https://zoharbabin.com/due-diligence-agents/sample-report/)** — interactive HTML output from a synthetic deal, no install required.
 
-### 📑 Walkthrough deck
 
-<p align="center">
-<a href="https://zoharbabin.com/due-diligence-agents/marketing/presentation.html">
-<img src="docs/marketing/assets/presentation-cover.png" alt="Due Diligence Agents — interactive walkthrough presentation (23 slides)" width="720">
-</a>
-</p>
-<p align="center">
-<a href="https://zoharbabin.com/due-diligence-agents/marketing/presentation.html"><strong>▶ Open the interactive walkthrough →</strong></a> · 23 slides · architecture, cross-domain synthesis, trust layer, and ROI · use <kbd>←</kbd>/<kbd>→</kbd> to navigate, <kbd>N</kbd> for speaker notes
-</p>
-
----
-
-<details>
-<summary><strong>CLI Interface Walkthrough Recording</strong></summary>
-  
-https://github.com/user-attachments/assets/03ae7e38-8280-488c-898a-61c1a361bb7d
-
-</details>
-
----
 
 Finds what gets buried across hundreds of contracts — cross-references it across 9 specialist domains (Legal, Finance, Commercial, ProductTech, Cybersecurity, HR, Tax, Regulatory, ESG) — and traces every finding to an exact page, section, and quote. Use the structured output alongside your advisors to build IC memos, advisor reports, negotiation checklists, or integration plans.
 
@@ -475,11 +454,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, code style, and PR
 | C&S Finance Group | [New Open-Source AI System with 13 Agents Launched to Automate M&A Due Diligence](https://www.csfinancegroup.com/news/new-open-source-ai-system-with-13-agents-launched-to-automate-m-a-due-diligence-27eaa0b3-23d1-4926-ba9e-b1cd051317ce) |
 | DEV Community | [Building a 13-Agent AI System for M&A Due Diligence — Architecture Deep Dive](https://dev.to/zoharbabin/building-a-13-agent-ai-system-for-ma-due-diligence-architecture-deep-dive-20ah) |
 
-## Star History
 
-If this project is useful to you, consider giving it a star — it helps others discover it.
-
-[![Star History Chart](https://api.star-history.com/svg?repos=zoharbabin/due-diligence-agents&type=Date)](https://star-history.com/#zoharbabin/due-diligence-agents&Date)
 
 ## License
 
