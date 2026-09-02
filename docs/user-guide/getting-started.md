@@ -1,0 +1,298 @@
+# Getting Started
+
+This tool accelerates M&A due diligence by analyzing your entire data room across 9 specialist domains (Legal, Finance, Commercial, ProductTech, Cybersecurity, HR, Tax, Regulatory, ESG) — helping your deal team find what gets buried, cross-reference it across domains, and trace every finding to an exact page and quote.
+
+[31% of M&A failures trace back to due diligence shortcomings](https://acquisitionstars.com/ma-failure-rate/), often because workstreams run in silos with no cross-referencing. This tool runs all nine workstreams simultaneously, cross-references findings across domains, and produces structured analysis your team can use as the foundation for IC memos, advisor reports, or negotiation checklists.
+
+**This tool does not replace professional advisors.** Legal, financial, and regulatory conclusions should always be made by qualified professionals. This tool helps your team and advisors work more efficiently.
+
+## Prerequisites
+
+- **Python 3.12 or later** — check with `python3 --version`. If you need to install or upgrade, download from [python.org](https://www.python.org/downloads/).
+- **An Anthropic API key** — [get one here](https://console.anthropic.com/). Alternatively, AWS Bedrock credentials work too.
+- **A data room folder** containing the contracts and documents to analyze.
+
+## Installation
+
+```bash
+pip install dd-agents[pdf]
+```
+
+This installs the tool and all required dependencies, including PDF extraction support.
+
+**Alternative: isolated install with pipx** (recommended for CLI tools — avoids conflicts with other Python packages):
+
+```bash
+pipx install dd-agents[pdf]
+```
+
+<details>
+<summary><strong>Install from source (for development)</strong></summary>
+
+```bash
+git clone https://github.com/zoharbabin/due-diligence-agents.git
+cd due-diligence-agents
+pip install -e ".[dev,pdf]"
+```
+</details>
+
+### Optional Extras
+
+Install these for additional capabilities:
+
+```bash
+pip install dd-agents[vector]     # Semantic search across documents (ChromaDB)
+pip install dd-agents[ocr]        # OCR for scanned PDFs (English)
+pip install dd-agents[glm-ocr]    # Multilingual OCR (100+ languages, Apple Silicon)
+```
+
+See [When to Enable Vector Search](#when-to-enable-vector-search) below for guidance on `dd-agents[vector]`.
+
+### Optional System Dependencies
+
+| Dependency | macOS | Linux | Purpose |
+|-----------|-------|-------|---------|
+| `poppler` | `brew install poppler` | `apt install poppler-utils` | Fallback PDF extraction |
+| `tesseract` | `brew install tesseract` | `apt install tesseract-ocr` | OCR for scanned PDFs |
+
+These are optional — the tool works without them but may produce lower-quality text from some scanned documents.
+
+## API Key Setup
+
+You need an API key to run the analysis. Choose one method:
+
+**Option A — `.env` file** (recommended, persists across terminal sessions):
+
+```bash
+cp .env.example .env
+```
+
+Then edit `.env` and set your key:
+
+```
+ANTHROPIC_API_KEY=sk-ant-...
+```
+
+**Option B — Environment variable** (temporary, lasts until you close the terminal):
+
+```bash
+export ANTHROPIC_API_KEY="sk-ant-..."
+```
+
+**Option C — AWS Bedrock:**
+
+```bash
+export CLAUDE_CODE_USE_BEDROCK=1
+export AWS_PROFILE=default
+export AWS_REGION=us-east-1
+```
+
+Google Vertex AI and **any other model** (GPT, Gemini, …) via an
+Anthropic-compatible gateway are also supported — see
+[Model Providers](model-providers.md).
+
+To override which AI model is used, pass `--model-profile economy|standard|premium` when running the pipeline (see [Running the Pipeline](running-pipeline.md)).
+
+## Verify Installation
+
+```bash
+dd-agents version
+```
+
+This prints the installed version. If the command is not found, ensure the package installed correctly and your PATH includes the Python scripts directory.
+
+## Preparing Your Data Room
+
+Organize your contracts into folders by subject (counterparty):
+
+```
+data_room/
+  SubjectGroup_A/
+    Acme_Corp/
+      master_agreement.pdf
+      amendment_2024.pdf
+    Beta_Inc/
+      license_agreement.pdf
+  SubjectGroup_B/
+    Gamma_LLC/
+      services_contract.docx
+  _reference/                    # Optional: reference docs (buyer overview, etc.)
+    buyer_overview.pdf
+```
+
+**Supported formats:** PDF, Word (.docx), Excel (.xlsx), PowerPoint (.pptx), and images. Scanned PDFs are handled via OCR.
+
+**Folder structure matters:** The tool uses folder names to identify which documents belong to which subject. A flat folder of files with no subfolder structure will still work — the tool groups them as a single entity — but organizing by subject produces better results.
+
+A pre-built sample deal — **Project Atlas** — is included at [`examples/project-atlas/`](https://github.com/zoharbabin/due-diligence-agents/tree/main/examples/project-atlas) so you can try the tool before setting up your own files. It is the same synthetic deal behind the [live sample report](https://zoharbabin.com/due-diligence-agents/sample-report/). Run it with `dd-agents run examples/project-atlas/deal-config.json`.
+
+### Audio/Video Transcription
+
+Audio and video files in the data room (`.mp3`, `.wav`, `.m4a`, `.mp4`, `.mov`, and similar) are automatically transcribed to text before analysis — no extra step needed. Board call recordings, earnings calls, or deposition audio drop into a subject folder like any other document.
+
+Transcription tries three backends in order, using whichever is installed:
+
+1. **mlx_whisper** — Apple Silicon, fastest on macOS
+2. **whisperx** — GPU-accelerated, cross-platform
+3. **openai-whisper** — broadest compatibility, no GPU required
+
+Install at least one (e.g. `pip install openai-whisper`) for transcription to run; without any backend, media files are skipped. Force a specific backend with `DD_TRANSCRIPTION_BACKEND` (`mlx`, `whisperx`, or `openai`), and override the model with `DD_TRANSCRIPTION_MODEL`.
+
+### When to Enable Vector Search
+
+Keyword search and agent tool access are sufficient for most data rooms. Vector search (`pip install dd-agents[vector]`, backed by ChromaDB) adds value for semantic, cross-document queries, but isn't necessary for the core analysis pipeline below **500 documents** — see [Knowledge Architecture](../knowledge-architecture.md#optional-vector-search-vs-mandatory-vector-search) for the full reasoning. Past that threshold, or once cross-document semantic patterns become a primary analysis mode, install the extra.
+
+If your data room crosses ~500 files and `dd-agents[vector]` isn't installed, `dd-agents run` logs an advisory warning (with `--verbose`) — it never blocks the pipeline.
+
+## Pre-Flight Check
+
+Before running the full pipeline, assess your data room quality:
+
+```bash
+dd-agents assess ./data_room
+```
+
+This reports file type distribution, extraction readiness, and an overall completeness score. Address any critical issues before proceeding.
+
+## First Run
+
+The typical workflow is three steps: generate a config, run the pipeline, review the report.
+
+### 1. Generate a Deal Configuration
+
+The fastest path is `auto-config`, which uses AI to scan your data room and produce a complete configuration:
+
+```bash
+dd-agents auto-config "Acme Corp" "Target Inc" --data-room ./data_room
+```
+
+This produces a `deal-config.json` with buyer/target details, company name variants, focus areas, and data room mapping. See [Deal Configuration](deal-configuration.md) for details.
+
+To preview the config without writing it:
+
+```bash
+dd-agents auto-config "Acme Corp" "Target Inc" --data-room ./data_room --dry-run
+```
+
+Alternatively, generate a config interactively without any API calls:
+
+```bash
+dd-agents init --data-room ./data_room
+```
+
+### 2. Run the Pipeline
+
+```bash
+dd-agents run deal-config.json
+```
+
+The pipeline extracts text, matches company names, runs AI analysis across all specialist domains, validates quality, and generates the report.
+
+To preview what will happen without making API calls:
+
+```bash
+dd-agents run deal-config.json --dry-run
+```
+
+To also produce a red-flag stoplight triage signal alongside the full analysis:
+
+```bash
+dd-agents run deal-config.json --quick-scan --model-profile economy
+```
+
+See [Running the Pipeline](running-pipeline.md) for all options including resume, model selection, and quality gates.
+
+### 3. Review the Report
+
+After the pipeline completes, find the outputs in `_dd/forensic-dd/runs/latest/report/`:
+
+- `dd_report.html` -- Interactive HTML report with cross-domain findings, severity filtering, and drill-down to exact clauses
+- `dd_report.xlsx` -- 16-sheet Excel report for detailed analysis and downstream work
+
+Open `dd_report.html` in a browser. See [Reading the Report](reading-report.md) for a walkthrough of each section.
+
+**Use these reports alongside your advisory process.** The structured findings, citations, and cross-references serve as the foundation for your team's own deliverables — board presentations, advisor memos, negotiation checklists, or integration plans.
+
+## Post-Run Tools
+
+### Interactive Chat
+
+Explore findings in a multi-turn conversation with document tools and persistent memory:
+
+```bash
+dd-agents chat --report _dd/forensic-dd/runs/latest
+```
+
+Ask follow-up questions, drill into source documents, verify citations — insights are saved automatically and recalled in future sessions.
+
+### Contract Search
+
+Search contracts with custom questions without running the full pipeline:
+
+```bash
+dd-agents search prompts.json --data-room ./data_room
+```
+
+### Natural Language Query
+
+Ask a single question about findings (for multi-turn conversations, use `chat` instead):
+
+```bash
+dd-agents query --report _dd/forensic-dd/runs/latest -q "How many high-severity findings?"
+```
+
+### PDF Export
+
+Export the HTML report to a print-ready PDF:
+
+```bash
+dd-agents export-pdf _dd/forensic-dd/runs/latest/report/dd_report.html
+```
+
+### Compare Runs
+
+Diff findings between two arbitrary run directories — e.g. after new documents land, or to compare two analysts' runs:
+
+```bash
+dd-agents diff _dd/forensic-dd/runs/run_a _dd/forensic-dd/runs/run_b
+```
+
+### Portfolio Management
+
+Track multiple due diligence projects and compare risk profiles across deals:
+
+```bash
+dd-agents portfolio add "Alpha Acquisition" --data-room ./alpha_data_room
+dd-agents portfolio list
+dd-agents portfolio compare
+```
+
+### Report Templates
+
+Apply templates for different audiences (Board Summary, Legal Deep Dive, etc.):
+
+```bash
+dd-agents templates list
+dd-agents templates show board_summary
+```
+
+See the [CLI Reference](cli-reference.md) for full documentation of all commands.
+
+## Docker
+
+Build and run in a container:
+
+```bash
+docker build -t dd-agents .
+docker run -e ANTHROPIC_API_KEY="sk-ant-..." \
+  -v ./data_room:/workspace/data_room \
+  -v ./deal-config.json:/workspace/deal-config.json \
+  dd-agents run deal-config.json
+```
+
+## Next Steps
+
+- [Deal Configuration](deal-configuration.md) -- Config file structure and generation
+- [Running the Pipeline](running-pipeline.md) -- Execution modes and options
+- [Reading the Report](reading-report.md) -- Navigating the HTML and Excel output
+- [CLI Reference](cli-reference.md) -- Complete command reference

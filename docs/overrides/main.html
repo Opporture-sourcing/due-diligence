@@ -1,0 +1,595 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+  {% set page_title = (page.title ~ " · " if page and page.title and not page.is_homepage else "") ~ config.site_name %}
+  {% set page_desc = (page.meta.description if page and page.meta and page.meta.description else config.site_description) %}
+  {% set og_image = config.site_url ~ "marketing/assets/social-preview.png" %}
+  {% set page_url = page.canonical_url if page and page.canonical_url else config.site_url %}
+
+  <meta name="description" content="{{ page_desc }}">
+  <meta name="author" content="{{ config.site_author }}">
+  <meta name="keywords" content="M&A due diligence, AI agents, contract analysis, open-source legal tech, private equity, corporate development">
+  <link rel="canonical" href="{{ page_url }}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ page_title }}">
+  <meta property="og:description" content="{{ page_desc }}">
+  <meta property="og:url" content="{{ page_url }}">
+  <meta property="og:image" content="{{ og_image }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ page_title }}">
+  <meta name="twitter:description" content="{{ page_desc }}">
+  <meta name="twitter:image" content="{{ og_image }}">
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"SoftwareApplication","name":"Due Diligence Agents","applicationCategory":"BusinessApplication","description":"Open-source forensic M&A due diligence. 13 AI agents read an entire data room across 9 specialist domains.","url":"{{ config.site_url }}","license":"https://www.apache.org/licenses/LICENSE-2.0","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Zohar Babin"}}
+  </script>
+
+  {% if page.is_homepage %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    .home-page .md-header,
+    .home-page .md-sidebar,
+    .home-page .md-footer-meta { display: none !important; }
+    .home-page .md-main        { margin: 0 !important; }
+    .home-page .md-main__inner { margin: 0 !important; max-width: 100% !important; }
+    .home-page .md-content,
+    .home-page .md-content__inner,
+    .home-page .md-typeset { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+  </style>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if page.is_homepage %}
+<script>
+  (function(){
+    var cl = ['home-page'];
+    document.documentElement.classList.add.apply(document.documentElement.classList, cl);
+    function set(){ document.body.classList.add.apply(document.body.classList, cl); }
+    document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', set) : set();
+  })();
+</script>
+
+<style>
+/* ──────────────────────────────────────────────
+   Design tokens
+   Light:  white body, #0c1018 hero/footer
+   Dark:   #0c1018 body, hero stays dark
+────────────────────────────────────────────── */
+:root,
+[data-md-color-scheme="default"] {
+  --bg:         #ffffff;
+  --bg-soft:    #f8fafc;
+  --bg-dark:    #0c1018;
+  --bd:         #e2e8f0;
+  --bd-soft:    #f1f5f9;
+  --tx:         #0f172a;
+  --tx-body:    #1e293b;
+  --tx-muted:   #475569;      /* 6.5:1 on white — WCAG AA */
+  --accent:     #2563eb;
+  --accent-dk:  #1d4ed8;
+  --nav-bg:     rgba(255,255,255,0.92);
+  --sh-card:    0 1px 3px rgba(0,0,0,0.06), 0 8px 32px rgba(0,0,0,0.04);
+  --sh-card-h:  0 4px 12px rgba(0,0,0,0.08), 0 20px 60px rgba(0,0,0,0.08);
+  --sh-term:    0 32px 80px rgba(0,0,0,0.22), 0 0 0 1px rgba(255,255,255,0.05) inset;
+}
+
+[data-md-color-scheme="slate"] {
+  --bg:         #0f172a;
+  --bg-soft:    #1e293b;
+  --bg-dark:    #020408;
+  --bd:         rgba(148,163,184,0.15);
+  --bd-soft:    rgba(148,163,184,0.07);
+  --tx:         #f1f5f9;
+  --tx-body:    #cbd5e1;
+  --tx-muted:   #94a3b8;      /* 5.1:1 on #0f172a */
+  --accent:     #60a5fa;
+  --accent-dk:  #93c5fd;
+  --nav-bg:     rgba(15,23,42,0.94);
+  --sh-card:    0 1px 3px rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.2);
+  --sh-card-h:  0 4px 12px rgba(0,0,0,0.4), 0 20px 60px rgba(0,0,0,0.3);
+  --sh-term:    0 32px 80px rgba(0,0,0,0.6);
+}
+
+/* ─── Reset & base ─────────────────────────── */
+.hw * { box-sizing: border-box; margin: 0; padding: 0; }
+.hw {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.7;
+  color: var(--tx-body);
+  background: var(--bg);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+.hw a { color: inherit; text-decoration: none; }
+.hw h1, .hw h2, .hw h3, .hw h4 {
+  color: var(--tx); line-height: 1.15; letter-spacing: -0.025em;
+}
+.c { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+
+/* ─── NAV ──────────────────────────────────── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+  height: 56px; display: flex; align-items: center;
+  background: var(--bg-dark);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+.nav.scrolled {
+  background: var(--nav-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom-color: var(--bd);
+  box-shadow: 0 1px 0 var(--bd);
+}
+.nav-i {
+  max-width: 1100px; margin: 0 auto; padding: 0 40px; width: 100%;
+  display: flex; align-items: center;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 9px;
+  margin-right: 36px; flex-shrink: 0;
+  text-decoration: none !important;
+}
+.logo-mark {
+  width: 28px; height: 28px; border-radius: 7px;
+  background: var(--accent); color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 600;
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.logo-name {
+  font-size: 15px; font-weight: 700; letter-spacing: -0.02em;
+  color: #fff; transition: color 0.25s;
+}
+.nav.scrolled .logo-name { color: var(--tx); }
+.nav-links { display: flex; gap: 24px; flex: 1; }
+.nav-links a {
+  font-size: 14px; font-weight: 500;
+  color: rgba(255,255,255,0.5) !important; text-decoration: none !important;
+  transition: color 0.15s;
+}
+.nav-links a:hover { color: rgba(255,255,255,0.9) !important; }
+.nav.scrolled .nav-links a { color: var(--tx-muted) !important; }
+.nav.scrolled .nav-links a:hover { color: var(--tx) !important; }
+.nav-r { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+.nav-icon-btn {
+  width: 34px; height: 34px; border-radius: 7px;
+  border: 1px solid rgba(255,255,255,0.14); background: transparent;
+  color: rgba(255,255,255,0.5); cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: border-color 0.15s, color 0.15s;
+}
+.nav-icon-btn:hover { border-color: rgba(255,255,255,0.4); color: #fff; }
+.nav.scrolled .nav-icon-btn { border-color: var(--bd); color: var(--tx-muted); }
+.nav.scrolled .nav-icon-btn:hover { border-color: var(--accent); color: var(--tx); }
+.nav-gh {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px; border: 1px solid rgba(255,255,255,0.14); border-radius: 7px;
+  font-size: 13px; font-weight: 500;
+  color: rgba(255,255,255,0.7) !important; text-decoration: none !important;
+  transition: border-color 0.15s, color 0.15s;
+}
+.nav-gh:hover { border-color: rgba(255,255,255,0.4); color: #fff !important; }
+.nav.scrolled .nav-gh { border-color: var(--bd); color: var(--tx-muted) !important; }
+.nav.scrolled .nav-gh:hover { border-color: var(--tx-muted); color: var(--tx) !important; }
+.nav-cta {
+  display: inline-flex; align-items: center; padding: 8px 18px;
+  background: var(--accent); color: #fff !important;
+  border-radius: 7px; font-size: 13px; font-weight: 600; letter-spacing: -0.01em;
+  text-decoration: none !important; transition: background 0.15s, transform 0.1s;
+}
+.nav-cta:hover { background: var(--accent-dk); transform: translateY(-1px); }
+
+/* ─── HERO ─────────────────────────────────── */
+.hero {
+  padding: 148px 40px 120px; text-align: center;
+  background: var(--bg-dark);
+  background-image:
+    radial-gradient(ellipse 110% 65% at 50% -10%, rgba(37,99,235,0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 5% 100%, rgba(37,99,235,0.07) 0%, transparent 50%);
+}
+.hero-inner {
+  max-width: 820px; margin: 0 auto;
+  animation: up 0.6s cubic-bezier(0.22,1,0.36,1) both;
+}
+@keyframes up { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:none; } }
+
+.hero-pre {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+  color: rgba(255,255,255,0.35); margin-bottom: 40px;
+}
+.hero-pre-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+.hero h1 {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: clamp(54px, 7.5vw, 100px);
+  font-weight: 400; line-height: 1.0; letter-spacing: -0.03em;
+  color: #f0f6ff; margin-bottom: 32px;
+}
+.hero h1 em { font-style: italic; color: #6ea8fe; }
+
+.hero-sub {
+  font-size: clamp(17px, 2vw, 20px); font-weight: 400; line-height: 1.65;
+  color: rgba(240,246,255,0.5); max-width: 540px; margin: 0 auto 52px;
+}
+.hero-ctas { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+
+.btn-prim {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 15px 30px; background: #fff; color: #0c1018 !important;
+  border-radius: 9px; font-size: 15px; font-weight: 700; letter-spacing: -0.015em;
+  text-decoration: none !important; transition: opacity 0.15s, transform 0.1s;
+}
+.btn-prim:hover { opacity: 0.92; transform: translateY(-1px); }
+
+.btn-sec {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 15px 30px; border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.8) !important; border-radius: 9px;
+  font-size: 15px; font-weight: 500; text-decoration: none !important;
+  transition: border-color 0.15s, color 0.15s;
+}
+.btn-sec:hover { border-color: rgba(255,255,255,0.5); color: #fff !important; }
+
+.hero-pip {
+  font-family: 'JetBrains Mono', monospace; font-size: 13px;
+  color: rgba(255,255,255,0.22); letter-spacing: 0.01em;
+}
+.hero-pip .pip-prompt { color: rgba(255,255,255,0.15); }
+.hero-pip .pip-cmd    { color: rgba(255,255,255,0.5); }
+
+/* ─── TRUST STRIP ──────────────────────────── */
+.trust-strip {
+  background: var(--bg); border-bottom: 1px solid var(--bd); padding: 16px 40px;
+}
+.trust-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+}
+.trust-item {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500;
+  color: var(--tx-muted); padding: 2px 24px; white-space: nowrap; line-height: 1;
+  border-right: 1px solid var(--bd);
+}
+.trust-item:last-child { border-right: none; }
+
+/* ─── SECTION TAGS ─────────────────────────── */
+.tag {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 14px; display: block;
+}
+.sec-h {
+  font-size: clamp(30px, 3.5vw, 46px); font-weight: 800; color: var(--tx);
+  margin-bottom: 14px; letter-spacing: -0.03em; line-height: 1.1;
+}
+.sec-sub { font-size: 17px; color: var(--tx-muted); line-height: 1.75; max-width: 480px; }
+
+/* ─── DEMO (2-col) ─────────────────────────── */
+.demo-sec { padding: 100px 40px; background: var(--bg); }
+.demo-grid {
+  display: grid; grid-template-columns: 5fr 8fr; gap: 72px; align-items: center;
+}
+.demo-copy { position: sticky; top: 80px; }
+.demo-stats {
+  display: flex; gap: 32px; margin-top: 40px; padding-top: 32px;
+  border-top: 1px solid var(--bd);
+}
+.ds-n {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: 40px; line-height: 1; color: var(--tx); letter-spacing: -0.03em;
+}
+.ds-l { font-size: 12px; font-weight: 600; color: var(--tx-muted); margin-top: 5px; }
+
+/* ─── TERMINAL ─────────────────────────────── */
+.terminal { background: #0d1117; border-radius: 12px; overflow: hidden; box-shadow: var(--sh-term); }
+.term-bar {
+  background: rgba(255,255,255,0.025); border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding: 12px 16px; display: flex; align-items: center; gap: 6px;
+}
+.dot { width: 12px; height: 12px; border-radius: 50%; }
+.dot-r{background:#ff5f57;} .dot-y{background:#febc2e;} .dot-g{background:#28c840;}
+.term-ttl { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.22); margin-left: 8px; }
+.term-body { padding: 22px 26px 28px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; line-height: 1.85; }
+.tl { display: block; }
+.tg { display: block; height: 6px; }
+.td { color: rgba(255,255,255,0.18); }
+.tk { color: #60a5fa; }
+.to { color: #475569; }
+.tok { color: #34d399; font-weight: 600; }
+.tw { color: #fb923c; }
+.te { color: #f87171; font-weight: 600; }
+.tq { color: #a78bfa; font-style: italic; }
+.tc { color: #e2e8f0; }
+
+/* ─── FEATURES ─────────────────────────────── */
+.feat-sec {
+  padding: 100px 40px; background: var(--bg-soft);
+  border-top: 1px solid var(--bd); border-bottom: 1px solid var(--bd);
+}
+.feat-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
+  background: var(--bd); border: 1px solid var(--bd); border-radius: 16px; overflow: hidden;
+  margin-top: 56px;
+}
+.feat-card { background: var(--bg); padding: 44px; transition: background 0.2s; }
+.feat-card:hover { background: var(--bg-soft); }
+.feat-n {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600;
+  letter-spacing: 0.06em; color: var(--accent); margin-bottom: 20px; display: block;
+}
+.feat-card h3 {
+  font-size: 20px; font-weight: 700; color: var(--tx); margin-bottom: 12px; letter-spacing: -0.02em;
+}
+.feat-card p { font-size: 15px; color: var(--tx-muted); line-height: 1.78; }
+.feat-card strong { color: var(--tx-body); font-weight: 600; }
+
+/* ─── PRINCIPLES ───────────────────────────── */
+.princ-sec { padding: 100px 40px; background: var(--bg); }
+.princ-grid {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 5fr 7fr; gap: 80px; align-items: start;
+}
+.princ-left { position: sticky; top: 88px; }
+.princ-left h2 {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: clamp(36px, 4.5vw, 60px); font-weight: 400;
+  color: var(--tx); line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 18px;
+}
+.princ-left h2 em { font-style: italic; color: var(--tx-muted); }
+.princ-left p { font-size: 16px; color: var(--tx-muted); line-height: 1.75; }
+.why-list { display: flex; flex-direction: column; }
+.why-item { padding: 28px 0; border-top: 1px solid var(--bd); }
+.why-item:last-child { border-bottom: 1px solid var(--bd); }
+.why-item h4 { font-size: 16px; font-weight: 700; color: var(--tx); margin-bottom: 7px; letter-spacing: -0.015em; }
+.why-item p { font-size: 14px; color: var(--tx-muted); line-height: 1.72; }
+
+/* ─── CTA (dark) ───────────────────────────── */
+.cta-sec {
+  padding: 120px 40px; text-align: center;
+  background: var(--bg-dark);
+  background-image: radial-gradient(ellipse 80% 60% at 50% 120%, rgba(37,99,235,0.18), transparent 60%);
+}
+.cta-sec h2 {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: clamp(42px, 6.5vw, 88px); font-weight: 400;
+  line-height: 1.0; letter-spacing: -0.03em; color: #f0f6ff; margin-bottom: 18px;
+}
+.cta-sec p { font-size: 18px; color: rgba(240,246,255,0.45); margin-bottom: 48px; line-height: 1.6; }
+
+/* ─── FOOTER ───────────────────────────────── */
+.footer { padding: 28px 40px; background: var(--bg-dark); border-top: 1px solid rgba(255,255,255,0.06); }
+.footer-i {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+}
+.footer-copy { font-size: 12px; color: rgba(255,255,255,0.25); line-height: 1.6; }
+.footer-links { display: flex; gap: 20px; }
+.footer-links a { font-size: 12px; color: rgba(255,255,255,0.3) !important; text-decoration: none !important; transition: color 0.15s; }
+.footer-links a:hover { color: rgba(255,255,255,0.7) !important; }
+
+/* ─── Responsive ───────────────────────────── */
+@media (max-width: 820px) {
+  .nav-links { display: none; }
+  .trust-item { padding: 2px 14px; font-size: 11px; }
+  .demo-sec { padding: 72px 24px; }
+  .demo-grid { grid-template-columns: 1fr; gap: 48px; }
+  .demo-copy { position: static; }
+  .feat-sec { padding: 72px 24px; }
+  .feat-grid { grid-template-columns: 1fr; }
+  .princ-sec { padding: 72px 24px; }
+  .princ-grid { grid-template-columns: 1fr; gap: 48px; }
+  .princ-left { position: static; }
+  .hero { padding: 120px 24px 96px; }
+  .footer-i { flex-direction: column; align-items: flex-start; }
+  .c { padding: 0 24px; }
+}
+</style>
+
+<div class="hw">
+
+<!-- ── NAV ─────────────────────────────────────────── -->
+<nav class="nav" id="site-nav">
+  <div class="nav-i">
+    <a href="https://zoharbabin.com/due-diligence-agents/" class="nav-logo">
+      <span class="logo-mark">DD</span>
+      <span class="logo-name">Agents</span>
+    </a>
+    <div class="nav-links">
+      <a href="https://zoharbabin.com/due-diligence-agents/user-guide/getting-started/">Docs</a>
+      <a href="https://zoharbabin.com/due-diligence-agents/agent-anatomy/">How it works</a>
+      <a href="https://zoharbabin.com/due-diligence-agents/sample-report/">Sample report</a>
+    </div>
+    <div class="nav-r">
+      <button class="nav-icon-btn" onclick="(function(){var e=document.querySelector('[data-md-toggle=\'__palette\']');if(e)e.click();})()" aria-label="Toggle colour scheme">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </button>
+      <a href="https://github.com/zoharbabin/due-diligence-agents" class="nav-gh">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub
+      </a>
+      <a href="https://zoharbabin.com/due-diligence-agents/user-guide/getting-started/" class="nav-cta">Get started</a>
+    </div>
+  </div>
+</nav>
+<script>
+  var _nav = document.getElementById('site-nav');
+  window.addEventListener('scroll', function(){ _nav.classList.toggle('scrolled', window.scrollY > 30); }, {passive:true});
+</script>
+
+<!-- ── HERO ─────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-pre"><span class="hero-pre-dot"></span>Open source · Apache-2.0 · Python 3.12+</div>
+    <h1>Legal flags a risk.<br>Finance flags another.<br>We connect <em>both.</em></h1>
+    <p class="hero-sub">13 AI agents read your entire data room across 9 specialist domains, cross-reference the findings no single reviewer links, and trace every conclusion to an exact verbatim quote.</p>
+    <div class="hero-ctas">
+      <a href="https://zoharbabin.com/due-diligence-agents/user-guide/getting-started/" class="btn-prim">Get started</a>
+      <a href="https://zoharbabin.com/due-diligence-agents/sample-report/" class="btn-sec">See sample report →</a>
+      <a href="https://zoharbabin.com/due-diligence-agents/marketing/presentation.html" class="btn-sec">View deck →</a>
+    </div>
+    <p class="hero-pip"><span class="pip-prompt">$</span> <span class="pip-cmd">pip install dd-agents</span></p>
+  </div>
+</section>
+
+<!-- ── TRUST STRIP ───────────────────────────────────── -->
+<div class="trust-strip">
+  <div class="trust-inner">
+    <span class="trust-item">PyPI · dd-agents</span>
+    <span class="trust-item">Apache-2.0</span>
+    <span class="trust-item">4,000+ tests</span>
+    <span class="trust-item">Docker Hub</span>
+    <span class="trust-item">Homebrew tap</span>
+  </div>
+</div>
+
+<!-- ── DEMO ──────────────────────────────────────────── -->
+<section class="demo-sec">
+  <div class="demo-grid c">
+    <div class="demo-copy">
+      <span class="tag">See it run</span>
+      <h2 class="sec-h">38 steps.<br>Every finding cited.</h2>
+      <p class="sec-sub">Point it at a folder. Quality-gated HTML report and 16-sheet Excel export — every conclusion traced to page, section, and verbatim quote.</p>
+      <div class="demo-stats">
+        <div>
+          <div class="ds-n">13</div>
+          <div class="ds-l">AI agents<br>in parallel</div>
+        </div>
+        <div>
+          <div class="ds-n">9</div>
+          <div class="ds-l">specialist<br>domains</div>
+        </div>
+        <div>
+          <div class="ds-n">16</div>
+          <div class="ds-l">Excel sheets<br>per report</div>
+        </div>
+      </div>
+    </div>
+    <div class="terminal">
+      <div class="term-bar">
+        <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+        <span class="term-ttl">dd-agents run deal-config.json</span>
+      </div>
+      <div class="term-body">
+        <span class="tl"><span class="td">▶ Step 06/38</span> <span class="tk">build_inventory</span></span>
+        <span class="tl">  <span class="to">Discovered 247 documents across 14 folders</span></span>
+        <span class="tg"></span>
+        <span class="tl"><span class="td">▶ Step 12/38</span> <span class="tk">run_specialists</span></span>
+        <span class="tl">  <span class="to">Legal · Finance · Commercial · ProductTech</span></span>
+        <span class="tl">  <span class="to">Cybersecurity · HR · Tax · Regulatory · ESG</span></span>
+        <span class="tg"></span>
+        <span class="tl"><span class="td">▶ Step 18/38</span> <span class="tk">cross_domain_analysis</span></span>
+        <span class="tl">  <span class="tw">⚡ trigger</span>  <span class="tc">IP clause (Legal §4.2) × ARR projection (Finance)</span></span>
+        <span class="tl">  <span class="te">CRITICAL</span>   <span class="tc">IP restriction threatens 38% of projected ARR</span></span>
+        <span class="tl">  <span class="tq">           "perpetual license excludes SaaS delivery"  MSA p.7 §4.2</span></span>
+        <span class="tg"></span>
+        <span class="tl"><span class="td">▶ Step 27/38</span> <span class="tk">merge_findings</span></span>
+        <span class="tl">  <span class="to">64 findings — 3 CRITICAL · 11 HIGH · 28 MEDIUM</span></span>
+        <span class="tg"></span>
+        <span class="tl"><span class="td">▶ Step 38/38</span> <span class="tk">generate_report</span></span>
+        <span class="tl">  <span class="tok">✓</span> <span class="tc">output/report.html</span>  <span class="to">(interactive HTML report)</span></span>
+        <span class="tl">  <span class="tok">✓</span> <span class="tc">output/report.xlsx</span>  <span class="to">(16-sheet Excel export)</span></span>
+        <span class="tl">  <span class="tok">✓ Pipeline complete</span>  <span class="to">4m 12s</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ──────────────────────────────────────── -->
+<section class="feat-sec">
+  <div class="c">
+    <span class="tag">Features</span>
+    <h2 class="sec-h">Built for the diligence,<br>not the demo.</h2>
+    <p class="sec-sub">No vendor lock-in. No per-seat pricing. Run inside your own infrastructure with your own LLM provider.</p>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <span class="feat-n">01</span>
+        <h3>Cross-domain analysis</h3>
+        <p>A legal clause that threatens a finance projection. A tech dependency that undermines a commercial term. <strong>Compound risks surface automatically</strong> — named, cited, and severity-ranked across all nine domains.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-n">02</span>
+        <h3>Every finding, cited to source</h3>
+        <p>Each conclusion traces back to a <strong>page number, section heading, and verbatim quote.</strong> Verifiable in under 60 seconds. The pipeline halts rather than ship output it can't ground.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-n">03</span>
+        <h3>Your data stays in your stack</h3>
+        <p>Documents travel only as API calls to <strong>your configured LLM provider</strong> — Anthropic, AWS Bedrock, Google Vertex, or any Anthropic-compatible gateway. Your infrastructure, your audit trail.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-n">04</span>
+        <h3>Structured, auditable output</h3>
+        <p>Interactive <strong>HTML report with Go/No-Go view</strong>, 16-sheet Excel export, JSON findings index, and IC memo template — structured for your advisors to verify, annotate, and build on.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRINCIPLES ────────────────────────────────────── -->
+<section class="princ-sec">
+  <div class="princ-grid">
+    <div class="princ-left">
+      <span class="tag">Why open source</span>
+      <h2>Your firm's AI,<br><em>on your<br>own terms.</em></h2>
+      <p>Apache-2.0. No per-seat pricing that rises with every deal. Run it on your own infrastructure or fork it to match your firm's exact workflow.</p>
+    </div>
+    <div class="why-list">
+      <div class="why-item">
+        <h4>Zero license cost</h4>
+        <p>Apache-2.0. No per-seat pricing that rises with every deal. You pay only your model API cost — use any provider you negotiate directly.</p>
+      </div>
+      <div class="why-item">
+        <h4>Self-hostable by design</h4>
+        <p>Deploy inside your perimeter. Compliance, data residency, and privilege-review controls stay under your firm's control — not a vendor's SLA.</p>
+      </div>
+      <div class="why-item">
+        <h4>Fork it. Extend it.</h4>
+        <p>Add practice-specific workflows, integrate your DMS, wire in your own citation engine. The full codebase is yours to read, audit, and shape.</p>
+      </div>
+      <div class="why-item">
+        <h4>Audit every line</h4>
+        <p>No black boxes. Open code, open prompt engineering. Know exactly how citations are parsed, severity scored, and data flows end to end.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── BOTTOM CTA ─────────────────────────────────────── -->
+<section class="cta-sec">
+  <div class="c">
+    <h2>Start analyzing.<br>Or clone the repo.</h2>
+    <p>Use it as-is, or deploy the source inside your own environment.</p>
+    <div class="hero-ctas">
+      <a href="https://zoharbabin.com/due-diligence-agents/user-guide/getting-started/" class="btn-prim">Read the docs</a>
+      <a href="https://github.com/zoharbabin/due-diligence-agents" class="btn-sec">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="footer-i">
+    <span class="footer-copy">© DD-Agents · Apache-2.0 · by Zohar Babin · dd-agents accelerates advisors — humans make the conclusions.</span>
+    <nav class="footer-links">
+      <a href="https://zoharbabin.com/due-diligence-agents/">Docs</a>
+      <a href="https://zoharbabin.com/due-diligence-agents/system-card/">System Card</a>
+      <a href="https://github.com/zoharbabin/due-diligence-agents">GitHub</a>
+      <a href="https://pypi.org/project/dd-agents/">PyPI</a>
+    </nav>
+  </div>
+</footer>
+
+</div>
+{% else %}
+  {{ super() }}
+{% endif %}
+{% endblock %}

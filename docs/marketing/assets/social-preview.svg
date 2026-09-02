@@ -1,0 +1,277 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0f1e"/>
+      <stop offset="50%" style="stop-color:#0f1729"/>
+      <stop offset="100%" style="stop-color:#131c33"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="40%" style="stop-color:#8b5cf6"/>
+      <stop offset="100%" style="stop-color:#ec4899"/>
+    </linearGradient>
+    <linearGradient id="glow-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0"/>
+    </linearGradient>
+    <linearGradient id="glow-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.12"/>
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:0"/>
+    </linearGradient>
+    <filter id="softglow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1280" height="640" fill="url(#bg)"/>
+
+  <!-- Subtle dot grid -->
+  <g opacity="0.04">
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="1" fill="white"/>
+    </pattern>
+    <rect width="1280" height="640" fill="url(#dots)"/>
+  </g>
+
+  <!-- Background glow orbs -->
+  <ellipse cx="200" cy="320" rx="300" ry="250" fill="url(#glow-blue)"/>
+  <ellipse cx="1050" cy="280" rx="350" ry="280" fill="url(#glow-purple)"/>
+
+  <!-- Accent gradient line at top -->
+  <rect x="0" y="0" width="1280" height="3" fill="url(#accent)"/>
+
+  <!-- ========== LEFT COLUMN: Branding + Stats ========== -->
+
+  <!-- Logo mark (iris) -->
+  <g transform="translate(64,38) scale(0.1172)">
+    <defs>
+      <radialGradient id="logoPupil" cx="43%" cy="39%" r="62%">
+        <stop offset="0%" stop-color="#eff5ff"/>
+        <stop offset="48%" stop-color="#93c5fd"/>
+        <stop offset="100%" stop-color="#3b82f6"/>
+      </radialGradient>
+    </defs>
+    <polygon points="260.7,86.1 361.6,122.8 302.7,221.6 272.8,200.5" fill="#3b82f6" stroke="#0a0f1e" stroke-width="2.5" stroke-linejoin="round"/>
+    <polygon points="368.9,128.9 422.5,221.8 313.9,259.6 304.5,224.2" fill="#6366f1" stroke="#0a0f1e" stroke-width="2.5" stroke-linejoin="round"/>
+    <polygon points="424.2,231.2 405.5,336.9 298.0,296.0 313.6,262.9" fill="#8b5cf6" stroke="#0a0f1e" stroke-width="2.5" stroke-linejoin="round"/>
+    <polygon points="400.8,345.1 318.6,414.1 262.5,313.6 295.7,298.3" fill="#ec4899" stroke="#0a0f1e" stroke-width="2.5" stroke-linejoin="round"/>
+    <polygon points="309.7,417.3 202.3,417.3 223.9,304.3 259.2,313.9" fill="#f97316" stroke="#0a0f1e" stroke-width="2.5" stroke-linejoin="round"/>
+    <polygon points="193.4,414.1 111.2,345.1 200.4,272.4 221.3,302.4" fill="#f59e0b" stroke="#0a0f1e" stroke-width="2.5" stroke-linejoin="round"/>
+    <polygon points="106.5,336.9 87.8,231.2 202.9,232.8 199.5,269.2" fill="#84cc16" stroke="#0a0f1e" stroke-width="2.5" stroke-linejoin="round"/>
+    <polygon points="89.5,221.8 143.1,128.9 230.2,204.0 204.2,229.8" fill="#10b981" stroke="#0a0f1e" stroke-width="2.5" stroke-linejoin="round"/>
+    <polygon points="150.4,122.8 251.3,86.1 269.6,199.6 233.2,202.7" fill="#06b6d4" stroke="#0a0f1e" stroke-width="2.5" stroke-linejoin="round"/>
+    <circle cx="256" cy="256" r="52" fill="url(#logoPupil)"/>
+    <circle cx="256" cy="256" r="52" fill="none" stroke="#0a0f1e" stroke-width="3" opacity="0.5"/>
+    <circle cx="242" cy="242" r="14" fill="#ffffff" opacity="0.9"/>
+  </g>
+
+  <!-- Title -->
+  <text x="156" y="90" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="42" font-weight="800" fill="white" letter-spacing="-0.5">Due Diligence Agents</text>
+
+  <!-- Tagline -->
+  <text x="64" y="130" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="20" fill="#94a3b8">Legal flags a risk. Finance another. We connect and cite.</text>
+
+  <!-- Subtitle -->
+  <text x="64" y="168" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" fill="#64748b">Open-source forensic M&amp;A due diligence — 13 AI agents read your data room,</text>
+  <text x="64" y="188" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" fill="#64748b">cross-reference findings no single reviewer connects, and cite every one.</text>
+
+  <!-- ========== STAT BOXES ROW ========== -->
+  <g transform="translate(64, 218)">
+    <!-- Box 1: 13 Agents -->
+    <rect x="0" y="0" width="138" height="78" rx="10" fill="#111827" stroke="#1e3a5f" stroke-width="1"/>
+    <text x="69" y="34" text-anchor="middle" font-family="system-ui, sans-serif" font-size="32" font-weight="700" fill="#3b82f6">13</text>
+    <text x="69" y="56" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#64748b">AI Agents</text>
+
+    <!-- Box 2: 38 Steps -->
+    <rect x="150" y="0" width="138" height="78" rx="10" fill="#111827" stroke="#312e81" stroke-width="1"/>
+    <text x="219" y="34" text-anchor="middle" font-family="system-ui, sans-serif" font-size="32" font-weight="700" fill="#8b5cf6">38</text>
+    <text x="219" y="56" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#64748b">Pipeline Steps</text>
+
+    <!-- Box 3: 9 Domains -->
+    <rect x="300" y="0" width="138" height="78" rx="10" fill="#111827" stroke="#064e3b" stroke-width="1"/>
+    <text x="369" y="34" text-anchor="middle" font-family="system-ui, sans-serif" font-size="32" font-weight="700" fill="#10b981">9</text>
+    <text x="369" y="56" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#64748b">Domains</text>
+
+    <!-- Box 4: 5 Gates -->
+    <rect x="450" y="0" width="138" height="78" rx="10" fill="#111827" stroke="#713f12" stroke-width="1"/>
+    <text x="519" y="34" text-anchor="middle" font-family="system-ui, sans-serif" font-size="32" font-weight="700" fill="#f59e0b">5</text>
+    <text x="519" y="56" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#64748b">Quality Gates</text>
+  </g>
+
+  <!-- ========== FEATURE HIGHLIGHTS ========== -->
+  <g transform="translate(64, 326)">
+    <!-- Feature 1 -->
+    <circle cx="8" cy="8" r="4" fill="#3b82f6"/>
+    <text x="22" y="13" font-family="system-ui, sans-serif" font-size="14" fill="#cbd5e1">Cross-domain neurosymbolic analysis</text>
+
+    <!-- Feature 2 -->
+    <circle cx="8" cy="36" r="4" fill="#8b5cf6"/>
+    <text x="22" y="41" font-family="system-ui, sans-serif" font-size="14" fill="#cbd5e1">Every finding traced to exact page &amp; quote</text>
+
+    <!-- Feature 3 -->
+    <circle cx="8" cy="64" r="4" fill="#10b981"/>
+    <text x="22" y="69" font-family="system-ui, sans-serif" font-size="14" fill="#cbd5e1">Interactive chat with document export</text>
+
+    <!-- Feature 4 -->
+    <circle cx="8" cy="92" r="4" fill="#f59e0b"/>
+    <text x="22" y="97" font-family="system-ui, sans-serif" font-size="14" fill="#cbd5e1">Knowledge compounding across runs</text>
+
+    <!-- Feature 5 -->
+    <circle cx="320" cy="8" r="4" fill="#ec4899"/>
+    <text x="334" y="13" font-family="system-ui, sans-serif" font-size="14" fill="#cbd5e1">HTML + Excel + JSON reports</text>
+
+    <!-- Feature 6 -->
+    <circle cx="320" cy="36" r="4" fill="#06b6d4"/>
+    <text x="334" y="41" font-family="system-ui, sans-serif" font-size="14" fill="#cbd5e1">Quick-scan red flag triage</text>
+
+    <!-- Feature 7 -->
+    <circle cx="320" cy="64" r="4" fill="#84cc16"/>
+    <text x="334" y="69" font-family="system-ui, sans-serif" font-size="14" fill="#cbd5e1">Contract search with citations</text>
+
+    <!-- Feature 8 -->
+    <circle cx="320" cy="92" r="4" fill="#f97316"/>
+    <text x="334" y="97" font-family="system-ui, sans-serif" font-size="14" fill="#cbd5e1">Portfolio management &amp; comparison</text>
+  </g>
+
+  <!-- ========== INSTALL COMMAND ========== -->
+  <rect x="64" y="462" width="400" height="42" rx="8" fill="#0a0f1e" stroke="#1e293b" stroke-width="1"/>
+  <text x="82" y="489" font-family="'SF Mono', 'Fira Code', 'Consolas', monospace" font-size="15" fill="#475569">$</text>
+  <text x="100" y="489" font-family="'SF Mono', 'Fira Code', 'Consolas', monospace" font-size="15" fill="#e2e8f0">pip install dd-agents</text>
+
+  <!-- ========== BOTTOM BADGE ROW ========== -->
+  <g transform="translate(64, 530)">
+    <rect x="0" y="0" width="90" height="26" rx="13" fill="#111827" stroke="#1e293b" stroke-width="1"/>
+    <text x="45" y="17" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">Python 3.12+</text>
+
+    <rect x="100" y="0" width="86" height="26" rx="13" fill="#111827" stroke="#1e293b" stroke-width="1"/>
+    <text x="143" y="17" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">Apache 2.0</text>
+
+    <rect x="196" y="0" width="94" height="26" rx="13" fill="#111827" stroke="#1e293b" stroke-width="1"/>
+    <text x="243" y="17" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">3,700+ tests</text>
+
+    <rect x="300" y="0" width="86" height="26" rx="13" fill="#111827" stroke="#1e293b" stroke-width="1"/>
+    <text x="343" y="17" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">mypy strict</text>
+
+    <rect x="396" y="0" width="116" height="26" rx="13" fill="#111827" stroke="#1e293b" stroke-width="1"/>
+    <text x="454" y="17" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">Built on Claude</text>
+  </g>
+
+  <!-- ========== RIGHT COLUMN: Architecture Diagram ========== -->
+  <g transform="translate(680, 50)">
+
+    <!-- Data Room box -->
+    <rect x="100" y="0" width="200" height="38" rx="8" fill="#111827" stroke="#334155" stroke-width="1"/>
+    <text x="200" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#94a3b8">Data Room</text>
+
+    <!-- Arrow -->
+    <line x1="200" y1="38" x2="200" y2="58" stroke="#334155" stroke-width="1.5"/>
+    <polygon points="196,54 204,54 200,62" fill="#334155"/>
+
+    <!-- Orchestrator -->
+    <rect x="60" y="62" width="280" height="38" rx="8" fill="#0f1d3a" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="200" y="86" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#93c5fd">Orchestrator  |  38 Steps</text>
+
+    <!-- Arrow to agents fan -->
+    <line x1="200" y1="100" x2="200" y2="118" stroke="#334155" stroke-width="1.5"/>
+
+    <!-- 9 Domain Agent boxes in 2 rows -->
+    <!-- Row 1: 5 agents -->
+    <g transform="translate(0, 122)">
+      <rect x="8" y="0" width="68" height="40" rx="5" fill="#111827" stroke="#3b82f6" stroke-width="1"/>
+      <text x="42" y="18" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#93c5fd">Legal</text>
+      <text x="42" y="31" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#475569">CoC TfC IP</text>
+
+      <rect x="84" y="0" width="68" height="40" rx="5" fill="#111827" stroke="#8b5cf6" stroke-width="1"/>
+      <text x="118" y="18" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#c4b5fd">Finance</text>
+      <text x="118" y="31" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#475569">Rev SaaS</text>
+
+      <rect x="160" y="0" width="68" height="40" rx="5" fill="#111827" stroke="#10b981" stroke-width="1"/>
+      <text x="194" y="18" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#6ee7b7">Comm.</text>
+      <text x="194" y="31" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#475569">SLA Pricing</text>
+
+      <rect x="236" y="0" width="68" height="40" rx="5" fill="#111827" stroke="#f59e0b" stroke-width="1"/>
+      <text x="270" y="18" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#fcd34d">Tech</text>
+      <text x="270" y="31" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#475569">Prod Arch</text>
+
+      <rect x="312" y="0" width="68" height="40" rx="5" fill="#111827" stroke="#ec4899" stroke-width="1"/>
+      <text x="346" y="18" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#f9a8d4">Cyber</text>
+      <text x="346" y="31" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#475569">Sec Data</text>
+    </g>
+
+    <!-- Row 2: 4 agents + cross-domain indicator -->
+    <g transform="translate(0, 170)">
+      <rect x="8" y="0" width="68" height="40" rx="5" fill="#111827" stroke="#06b6d4" stroke-width="1"/>
+      <text x="42" y="18" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#67e8f9">HR</text>
+      <text x="42" y="31" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#475569">Employ.</text>
+
+      <rect x="84" y="0" width="68" height="40" rx="5" fill="#111827" stroke="#84cc16" stroke-width="1"/>
+      <text x="118" y="18" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#bef264">Tax</text>
+      <text x="118" y="31" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#475569">Struct.</text>
+
+      <rect x="160" y="0" width="68" height="40" rx="5" fill="#111827" stroke="#f97316" stroke-width="1"/>
+      <text x="194" y="18" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#fdba74">Reg.</text>
+      <text x="194" y="31" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#475569">Comply</text>
+
+      <rect x="236" y="0" width="68" height="40" rx="5" fill="#111827" stroke="#a3e635" stroke-width="1"/>
+      <text x="270" y="18" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#d9f99d">ESG</text>
+      <text x="270" y="31" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#475569">Sustain.</text>
+    </g>
+
+    <!-- Cross-domain arrows (symbolic) -->
+    <g opacity="0.5">
+      <line x1="70" y1="170" x2="150" y2="158" stroke="#8b5cf6" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <line x1="150" y1="170" x2="250" y2="158" stroke="#3b82f6" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <line x1="260" y1="170" x2="340" y2="158" stroke="#10b981" stroke-width="0.8" stroke-dasharray="3,3"/>
+    </g>
+
+    <!-- Cross-Domain Analysis label -->
+    <rect x="312" y="176" width="80" height="28" rx="5" fill="#1a0a2e" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="4,2"/>
+    <text x="352" y="194" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="#c4b5fd">X-Domain</text>
+
+    <!-- Arrow down from agents -->
+    <line x1="200" y1="216" x2="200" y2="240" stroke="#334155" stroke-width="1.5"/>
+    <polygon points="196,236 204,236 200,244" fill="#334155"/>
+
+    <!-- Judge + QA -->
+    <rect x="60" y="244" width="280" height="38" rx="8" fill="#111827" stroke="#10b981" stroke-width="1.5"/>
+    <text x="200" y="268" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#6ee7b7">Judge  |  QA Validation  |  Merge</text>
+
+    <!-- Arrow down -->
+    <line x1="200" y1="282" x2="200" y2="302" stroke="#334155" stroke-width="1.5"/>
+    <polygon points="196,298 204,298 200,306" fill="#334155"/>
+
+    <!-- Reports output -->
+    <g transform="translate(30, 306)">
+      <rect x="0" y="0" width="105" height="38" rx="8" fill="#111827" stroke="#f59e0b" stroke-width="1"/>
+      <text x="52" y="24" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#fcd34d">HTML Report</text>
+
+      <rect x="115" y="0" width="105" height="38" rx="8" fill="#111827" stroke="#ec4899" stroke-width="1"/>
+      <text x="167" y="24" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#f9a8d4">Excel (14 sheets)</text>
+
+      <rect x="230" y="0" width="85" height="38" rx="8" fill="#111827" stroke="#06b6d4" stroke-width="1"/>
+      <text x="272" y="24" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#67e8f9">JSON</text>
+    </g>
+
+    <!-- Arrow down to Knowledge -->
+    <line x1="200" y1="350" x2="200" y2="370" stroke="#334155" stroke-width="1.5"/>
+    <polygon points="196,366 204,366 200,374" fill="#334155"/>
+
+    <!-- Knowledge Base -->
+    <rect x="60" y="374" width="280" height="38" rx="8" fill="#111827" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="4,2"/>
+    <text x="200" y="398" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#c4b5fd">Deal Knowledge Base  |  Compounds</text>
+
+    <!-- Arrow down to Chat -->
+    <line x1="200" y1="412" x2="200" y2="432" stroke="#334155" stroke-width="1.5"/>
+    <polygon points="196,428 204,428 200,436" fill="#334155"/>
+
+    <!-- Interactive Chat -->
+    <rect x="60" y="436" width="280" height="38" rx="8" fill="#0f1d3a" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="200" y="460" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#93c5fd">Interactive Chat  |  Export |  Search</text>
+
+  </g>
+
+  <!-- Bottom accent line -->
+  <rect x="0" y="637" width="1280" height="3" fill="url(#accent)"/>
+</svg>
